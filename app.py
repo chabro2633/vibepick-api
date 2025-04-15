@@ -1,8 +1,9 @@
-
 from flask import Flask, jsonify
+from flask_cors import CORS
 import random
 
 app = Flask(__name__)
+CORS(app, origins=["https://vibepick.tech"])
 
 cookies = [
     "오늘도 충분히 잘하고 있어요 🍀",
