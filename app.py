@@ -3,9 +3,13 @@ import gspread
 import random
 import os
 import json
+from flask_cors import CORS  # ✅ CORS 추가
 from oauth2client.service_account import ServiceAccountCredentials
 
 app = Flask(__name__)
+
+# ✅ CORS 허용 (워드프레스 도메인에 맞춰 설정)
+CORS(app, origins=["https://vibepick.tech"])
 
 # 구글시트 API 연결
 scope = ["https://spreadsheets.google.com/feeds", "https://www.googleapis.com/auth/drive"]
