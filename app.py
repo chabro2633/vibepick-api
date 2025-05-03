@@ -1,20 +1,21 @@
 from flask import Flask, jsonify
-from flask_cors import CORS
+import gspread
 import random
+from oauth2client.service_account import ServiceAccountCredentials
 
 app = Flask(__name__)
-CORS(app, origins=["https://vibepick.tech"])
 
-cookies = [
-    "오늘도 충분히 잘하고 있어요 🍀",
-    "작은 선택이 큰 기회를 만듭니다 🌈",
-    "생각보다 더 멋진 하루가 기다리고 있어요 ✨"
-]
+# 구글시트 API 연결
+scope = ["https://spreadsheets.google.com/feeds", "https://www.googleapis.com/auth/drive"]
+credentials = ServiceAccountCredentials.from_json_keyfile_name("mysheets_key.json", scope)
+client = gspread.authorize(credentials)
 
-@app.route('/api/cookie')
+sheet = client.open("TodaysCookie").sheet1  # 시트 이름
+cookies = sheet.col_values(1)  # A열의 문구들
+
+@app.route("/get-cookie")
 def get_cookie():
     return jsonify({"cookie": random.choice(cookies)})
 
-@app.route('/')
-def hello():
-    return "VibePick API is running"
+if __name__ == "__main__":
+    app.run()
